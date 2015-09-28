@@ -49,27 +49,30 @@ int main(){
 
     // reset_copy(copy, prog, len);
     // output the definition of PROG as quoted strings
-    printf("%s", "#define PROG ");
+    printf("%s %c", "#define PROG ", QUOTE);
     reset_copy(copy, prog, len);
-    for (i = 0; i < line_count; i++){
-      line = strtok(i > 0 ? NULL : copy, "\n");
-      printf("%c", QUOTE);
-      //use ascii codes for special chars to avoid meta escaping problem
-      // printf("%c%s%c%c%c", QUOTE, line, QUOTE, BACKSLASH, NEWLINE);
-      for (ptr = line; *ptr != 0; ptr++){
-        switch (*ptr){
-          case QUOTE:
-            printf("%c%c", BACKSLASH, QUOTE);
-            break;
-          case BACKSLASH:
-            printf("%c%c", BACKSLASH, BACKSLASH);
-            break;
-          default:
-            printf("%c", *ptr);
-        }
+
+    //use ascii codes for special chars to avoid meta escaping problem
+    int newline_started = 0;
+    for (ptr = copy; *ptr != 0; ptr++){
+      if (newline_started){
+        printf("%c", QUOTE);
+        newline_started = 0;
       }
-      printf("%c%c", BACKSLASH, 'n'); //print escaped newline char inside string
-      printf("%c%c%c", QUOTE, BACKSLASH, NEWLINE);
+      switch (*ptr){
+        case QUOTE:
+          printf("%c%c", BACKSLASH, QUOTE);
+          break;
+        case BACKSLASH:
+          printf("%c%c", BACKSLASH, BACKSLASH);
+          break;
+        case NEWLINE:
+          printf("%c%c%c%c%c", BACKSLASH, 'n', QUOTE, BACKSLASH, NEWLINE);
+          newline_started = 1;
+          break;
+        default:
+          printf("%c", *ptr);
+      }
     }
 
     //output the main body of the program
