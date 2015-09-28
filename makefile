@@ -5,3 +5,6 @@ prog_gen: prog_gen.py
 
 prog: assn2.c prog.h
 	gcc assn2.c -o prog
+
+bootstrap: prog
+	./prog > bootstrap.c
