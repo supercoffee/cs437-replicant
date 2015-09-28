@@ -52,7 +52,7 @@ int main(){
     printf("%s %c", "#define PROG ", QUOTE);
     reset_copy(copy, prog, len);
 
-    //use ascii codes for special chars to avoid meta escaping problem
+    //print escaped versions of special characters
     int newline_started = 0;
     for (ptr = copy; *ptr != 0; ptr++){
       if (newline_started){
@@ -77,6 +77,8 @@ int main(){
 
     //output the main body of the program
     reset_copy(copy, prog, len);
+    
+    //move back by two bytes to print original comment chars
     ptr = strstr(copy, "#####") - 2;
     for (; ptr < copy + len; ptr++){
       printf("%c", *ptr);
