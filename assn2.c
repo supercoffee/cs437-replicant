@@ -1,12 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-
-#define PROG "#include <stdio.h>\n"\
-"#define PROG \n"\
-"int main(){\n"\
-" int i;"\
-"}"
+#include "prog.h"
 
 void reset_copy(char * copy, char * og, int len){
   strncpy(copy, og, len);
@@ -28,12 +23,12 @@ int main(){
     reset_copy(copy, prog, len);
 
     char * line;
-    // output the first two lines of the program unescaped
-    for (i = 0; i < 2; i++){
 
-      //strtok takes copy the first time, null after that. RTFM
-      line = strtok( i > 0 ? NULL : copy, "\n");
-      printf("%s\n", line);
+    //print one char of the program headers at a time until we reach the marker
+    const char * marker = strstr(copy, "#include \"prog.h\"");
+    char * ptr;
+    for(ptr = copy; ptr < marker; ptr++){
+      printf("%c", *ptr);
     }
 
     // count the total number of lines in the program
@@ -43,10 +38,12 @@ int main(){
       i++, line_count++
     );
 
-    reset_copy(copy, prog, len);
-    // output the definition of PROG as quoted strings
-    for (i = 0; i < line_count; i++){
-      line = strtok(i > 0 ? NULL : copy, "\n");
-      printf("\"%s\"\n", line);
-    }
+    // reset_copy(copy, prog, len);
+    // // output the definition of PROG as quoted strings
+    // for (i = 0; i < line_count; i++){
+    //   line = strtok(i > 0 ? NULL : copy, "\n");
+    //   printf("\"%s\"\n", line);
+    // }
+
+    free(copy);
 }
