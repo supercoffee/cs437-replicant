@@ -1,10 +1,13 @@
-all: prog_gen prog
+all: prog_gen bootstrap replicant_source replicant_bin
 
 prog_gen: prog_gen.py
-	python3 prog_gen.py assn2.c > prog.h
+	python3 prog_gen.py bootstrap.c > prog.h
 
-prog: assn2.c prog.h
-	gcc assn2.c -o prog
+bootstrap: bootstrap.c prog.h
+	gcc bootstrap.c -o bootstrap
 
-bootstrap: prog
-	./prog > bootstrap.c
+replicant_source:
+	./bootstrap > replicant.c
+
+replicant_bin:
+	gcc replicant.c -o replicant

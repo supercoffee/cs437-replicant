@@ -2,3 +2,5 @@ a.out
 prog
 prog.h
 bootstrap
+replicant
+replicant.c
